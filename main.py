@@ -17,7 +17,6 @@ Options:
 import cv2
 from docopt import docopt
 from threading import Thread
-from queue import Queue
 
 
 class VideoStream:
@@ -29,7 +28,6 @@ class VideoStream:
     def __enter__(self):
         # start a thread to read frames from the camera stream
         t = Thread(target=self.update, args=())
-        t.daemon = True
         t.start()
         return self
 
