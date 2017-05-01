@@ -6,7 +6,7 @@ CameraStreamer::CameraStreamer(vector<string> stream_source)
     this->camera_count = this->camera_source.size();
     isUSBCamera = false;
 
-    startMultiCapture();
+    this->startMultiCapture();
 }
 
 CameraStreamer::CameraStreamer(vector<int> capture_index)
@@ -15,12 +15,12 @@ CameraStreamer::CameraStreamer(vector<int> capture_index)
     this->camera_count = capture_index.size();
     isUSBCamera = true;
 
-    startMultiCapture();
+    this->startMultiCapture();
 }
 
 CameraStreamer::~CameraStreamer()
 {
-    stopMultiCapture();
+    this->stopMultiCapture();
 }
 
 void CameraStreamer::captureFrame(int index)
