@@ -32,7 +32,7 @@ class VideoStream:
         return self
 
     def update(self):
-        while True:
+        while True:  # not self.stopped:
             # allow to stop thread from main process
             if self.stopped:
                 return
@@ -41,11 +41,9 @@ class VideoStream:
     def read(self):
         return self.frame
 
-    def stop(self):
-        self.stopped = True
-
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.stream.release()
+        self.stopped = True
+        # self.stream.release()
 
 
 def main(ip, user, password):
@@ -61,7 +59,6 @@ def main(ip, user, password):
             cv2.imshow("Frame", frame)
             key = cv2.waitKey(1)
             if key == 27 or key == 113:
-                cap.stop()
                 break
 
     cv2.destroyAllWindows()
