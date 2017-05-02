@@ -2,7 +2,7 @@
 Read Camera in separated thread
 
 Usage:
-    main.py (IP USER PASS)
+    main.py (IP USER PASSWORD)
     main.py -h | --help
     main.py --version
 
@@ -11,7 +11,7 @@ Options:
     --version     Show version.
     IP            Ip address of camera
     USER          User
-    PASS          Password
+    PASSWORD          Password
 """
 
 import cv2
@@ -44,12 +44,12 @@ class VideoStream:
     def stop(self):
         self.stopped = True
 
-    def __exit__(self):
+    def __exit__(self, exc_type, exc_val, exc_tb):
         self.stream.release()
 
 
 def main(ip, user, password):
-    with VideoStream("rtsp://{user}:{password}@{ip}:554/video.pro1".format({"ip": ip, "user": user, "password": password})).start() as cap:
+    with VideoStream("rtsp://{user}:{password}@{ip}:554/video.pro1".format(ip=ip, user=user, password=password)) as cap:
         while True:
             frame = cap.read()
             if frame is None:
@@ -60,7 +60,7 @@ def main(ip, user, password):
 
             cv2.imshow("Frame", frame)
             key = cv2.waitKey(1)
-            if key == 112:
+            if key == 27 or key == 113:
                 cap.stop()
                 break
 
@@ -71,4 +71,4 @@ if __name__ == '__main__':
     args = docopt(__doc__, version='0.1')
     print(args)
 
-    main(**args)
+    main(args["IP"], args["USER"], args["PASSWORD"])
