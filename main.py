@@ -22,6 +22,8 @@ from threading import Thread
 class VideoStream:
     def __init__(self, path):
         self.stream = cv2.VideoCapture(path)
+        if not self.stream.isOpened():
+            raise IOError("Can't reach the Camera: {}".format(path))
         self.ret, self.frame = self.stream.read()
         self.stopped = False
 
@@ -32,10 +34,10 @@ class VideoStream:
         return self
 
     def update(self):
-        while True:  # not self.stopped:
+        while not self.stopped:
             # allow to stop thread from main process
-            if self.stopped:
-                return
+            # if self.stopped:
+            #     return
             self.ret, self.frame = self.stream.read()
 
     def read(self):
