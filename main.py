@@ -29,8 +29,8 @@ class VideoStream:
 
     def __enter__(self):
         # start a thread to read frames from the camera stream
-        t = Thread(target=self.update, args=())
-        t.start()
+        self.t = Thread(target=self.update, args=())
+        self.t.start()
         return self
 
     def update(self):
@@ -45,8 +45,8 @@ class VideoStream:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.stopped = True
-        # self.stream.release()
-
+        self.stream.release()
+        self.t.join()
 
 def main(ip, user, password):
     with VideoStream("rtsp://{user}:{password}@{ip}:554/video.pro1".format(ip=ip, user=user, password=password)) as cap:
